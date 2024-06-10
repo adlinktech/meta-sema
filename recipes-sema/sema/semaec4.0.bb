@@ -11,7 +11,7 @@ inherit module
 DEPENDS += "  util-linux util-linux-libuuid"
 
 SRCBRANCH = "sema-ec"
-SRCREV = "904ff8d2723384ac17db79b4c657caf6c109b41a"
+SRCREV = "2fa426648805676ac815ac764b651e05d1a65cb2"
 SRC_URI = "git://github.com/ADLINK/sema-linux.git;branch=${SRCBRANCH};protocol=http \
            "
 
