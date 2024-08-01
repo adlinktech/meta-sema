@@ -8,13 +8,13 @@ SECTION = "Applications"
 LICENSE = "CLOSED"
 
 inherit module
+DEPENDS += "  util-linux util-linux-libuuid"
 
-SRCREV = "48f5e4acf7360b4fc01e978f809c0c58ecbab55f"
+SRCREV = "b7b82c640c2ff46ded840afe8c7c26335d2b8bb1"
 SRC_URI = "git://github.com/ADLINK/sema-linux.git;branch=sema-bmc;protocol=http \
            "
 
 SRC_URI:append ="file://Makefile \
-  file://0001-i2c-driver-remove-proto-change.patch \
 "
 
 S = "${WORKDIR}/git"
@@ -38,25 +38,25 @@ do_compile:append() {
 	${WORKDIR}/git/lib/init.c \
 	${WORKDIR}/git/lib/storage.c \
 	${WORKDIR}/git/lib/watchdog.c -o ${WORKDIR}/git/lib/libsema.so
-  	${CC} ${CFLAGS} -Wall -L${WORKDIR}/git/lib/ ${WORKDIR}/git/app/main.c -lsema -o ${WORKDIR}/git/semautil 
+  	${CC} ${CFLAGS} -Wall -L${WORKDIR}/git/lib/ ${WORKDIR}/git/app/main.c -lsema -luuid -o ${WORKDIR}/git/semautil 
 }
 
 do_install:append() {
 	install -d -m 0755 ${D}/lib64
 	ln -s -r ${D}/lib/ld-linux-x86-64.so.2  ${D}/lib64/ld-linux-x86-64.so.2 
-	install -d -m 0755 ${D}/usr${base_libdir}
-	install -d -m 0755 ${D}/usr${base_bindir}
-	install -m 0755 ${WORKDIR}/git/semautil ${D}/usr${base_bindir}/
-	install -m 0755 ${WORKDIR}/git/lib/libsema.so ${D}/usr${base_libdir}/
+	install -d -m 0755 ${D}${base_libdir}
+	install -d -m 0755 ${D}${base_bindir}
+	install -m 0755 ${WORKDIR}/git/semautil ${D}${base_bindir}/
+	install -m 0755 ${WORKDIR}/git/lib/libsema.so ${D}${base_libdir}/
 }
 
 
-FILES:${PN} += "/etc /lib64 /usr${base_bindir}/semautil /usr${base_libdir}/*.so"
+FILES:${PN} += "/etc /lib64 ${base_bindir}/semautil ${base_libdir}/*.so"
 FILES_SOLIBSDEV = ""
 do_package_qa() {
 }
 
-INSANE_SKIP_${PN} = "already-stripped"
+INSANE_SKIP:${PN} = "already-stripped"
 
 KERNEL_MODULE_AUTOLOAD += "\
 adl-bmc \
