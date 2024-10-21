@@ -44,19 +44,19 @@ do_compile:append() {
 do_install:append() {
 	install -d -m 0755 ${D}/lib64
 	ln -s -r ${D}/lib/ld-linux-x86-64.so.2  ${D}/lib64/ld-linux-x86-64.so.2 
-	install -d -m 0755 ${D}/usr${base_libdir}
-	install -d -m 0755 ${D}/usr${base_bindir}
-	install -m 0755 ${WORKDIR}/git/semautil ${D}/usr${base_bindir}/
-	install -m 0755 ${WORKDIR}/git/lib/libsema.so ${D}/usr${base_libdir}/
+	install -d -m 0755 ${D}${base_libdir}
+	install -d -m 0755 ${D}${base_bindir}
+	install -m 0755 ${WORKDIR}/git/semautil ${D}${base_bindir}/
+	install -m 0755 ${WORKDIR}/git/lib/libsema.so ${D}${base_libdir}/
 }
 
 
-FILES:${PN} += "/etc /lib64 /usr${base_bindir}/semautil /usr${base_libdir}/*.so"
+FILES:${PN} += "/etc /lib64 ${base_bindir}/semautil ${base_libdir}/*.so"
 FILES_SOLIBSDEV = ""
 do_package_qa() {
 }
 
-INSANE_SKIP_${PN} = "already-stripped"
+INSANE_SKIP:${PN} = "already-stripped"
 
 KERNEL_MODULE_AUTOLOAD += "\
 adl-ec \
